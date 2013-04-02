@@ -39,8 +39,8 @@ def game_data(game_date):
         yield game
 
 def game_stats(data):
-    home = TeamStats(data["home_code"].upper())
-    away = TeamStats(data["away_code"].upper())
+    home = TeamStats(data["home_name_abbrev"].upper())
+    away = TeamStats(data["away_name_abbrev"].upper())
     
     if data["ind"] == 'F':
         home.win = int(data["home_win"])
