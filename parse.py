@@ -1,6 +1,7 @@
 import json
+import sys
 
-from datetime import date
+from datetime import date, datetime
 from urllib2 import urlopen
 
 def game_data(game_date):
@@ -21,7 +22,14 @@ def game_stats(data):
     yield fmt_string % (data["away_code"].upper(), data["away_win"], data["away_loss"], data["away_team_hits"], data["away_team_hr"])
 
 if __name__ == "__main__":
-    for game in game_data(date.today()):
+    game_date = None
+    if len(sys.argv) > 1:
+        date_str = sys.argv[1]
+        game_date = datetime.strptime(date_str, "%Y%m%d")
+    if not game_date:
+        game_date = date.today()
+
+    for game in game_data(game_date):
         for team in game_stats(game):
             print team
     
