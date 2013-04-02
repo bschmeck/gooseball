@@ -12,8 +12,12 @@ def game_data(game_date):
 
     data = urlopen(url).read()
     scoreboard = json.loads(data)
+    game_arr = scoreboard["data"]["games"]["game"]
 
-    for game in scoreboard["data"]["games"]["game"]:
+    # If there's only one game, it doesn't seem to be in an array.  Force it.
+    if type(game_arr) == dict:
+        game_arr = [game_arr]
+    for game in game_arr:
         yield game
 
 def game_stats(data):
