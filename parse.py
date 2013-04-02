@@ -4,6 +4,24 @@ import sys
 from datetime import date, datetime, timedelta
 from urllib2 import urlopen
 
+class TeamStats:
+    def __init__(self, team):
+        self.team = team
+        self.hits = 0
+        self.hr = 0
+        self.win = 0
+        self.loss = 0
+
+    def final(self):
+        return self.win + self.loss > 0
+    
+    def __str__(self):
+        if self.final():
+            fmt_string = "%s,%d,%d,%d,%d"
+            return fmt_string % (self.team, self.win, self.loss, self.hits, self.hr)
+        else:
+            return "%s,In Progress" % (self.team)
+        
 def game_data(game_date):
     year = game_date.strftime('%Y')
     month = game_date.strftime('%m')
@@ -21,18 +39,20 @@ def game_data(game_date):
         yield game
 
 def game_stats(data):
-    home_team = data["home_code"].upper()
-    away_team = data["away_code"].upper()
+    home = TeamStats(data["home_code"].upper())
+    away = TeamStats(data["away_code"].upper())
     
     if data["ind"] == 'F':
-        fmt_string = "%s,%s,%s,%s,%s"
-        home_stats = fmt_string % (home_team, data["home_win"], data["home_loss"], data["home_team_hits"], data["home_team_hr"])
-        away_stats = fmt_string % (away_team, data["away_win"], data["away_loss"], data["away_team_hits"], data["away_team_hr"])
-    else:
-        home_stats = "%s,In Progress" % (home_team)
-        away_stats = "%s,In Progress" % (away_team)
-    yield home_stats
-    yield away_stats
+        home.win = int(data["home_win"])
+        home.loss = int(data["home_loss"])
+        home.hits = int(data["home_team_hits"])
+        home.hr = int(data["home_team_hr"])
+        away.win = int(data["away_win"])
+        away.loss = int(data["away_loss"])
+        away.hits = int(data["away_team_hits"])
+        away.hr = int(data["away_team_hr"])
+    yield home
+    yield away
 
 if __name__ == "__main__":
     game_date = None
