@@ -21,9 +21,18 @@ def game_data(game_date):
         yield game
 
 def game_stats(data):
-    fmt_string = "%s,%s,%s,%s,%s"
-    yield fmt_string % (data["home_code"].upper(), data["home_win"], data["home_loss"], data["home_team_hits"], data["home_team_hr"])
-    yield fmt_string % (data["away_code"].upper(), data["away_win"], data["away_loss"], data["away_team_hits"], data["away_team_hr"])
+    home_team = data["home_code"].upper()
+    away_team = data["away_code"].upper()
+    
+    if data["ind"] == 'F':
+        fmt_string = "%s,%s,%s,%s,%s"
+        home_stats = fmt_string % (home_team, data["home_win"], data["home_loss"], data["home_team_hits"], data["home_team_hr"])
+        away_stats = fmt_string % (away_team, data["away_win"], data["away_loss"], data["away_team_hits"], data["away_team_hr"])
+    else:
+        home_stats = "%s,In Progress" % (home_team)
+        away_stats = "%s,In Progress" % (away_team)
+    yield home_stats
+    yield away_stats
 
 if __name__ == "__main__":
     game_date = None
