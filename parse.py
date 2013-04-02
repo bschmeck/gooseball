@@ -17,10 +17,10 @@ class TeamStats:
     
     def __str__(self):
         if self.final():
-            fmt_string = "%s,%d,%d,%d,%d"
-            return fmt_string % (self.team, self.win, self.loss, self.hits, self.hr)
+            fmt_string = "%(team)s,%(win)d,%(loss)d,%(hits)d,%(hr)d"
+            return fmt_string % self.__dict__
         else:
-            return "%s,In Progress" % (self.team)
+            return "%(team)s,In Progress" % self.__dict__
         
 def game_data(game_date):
     year = game_date.strftime('%Y')
