@@ -1,7 +1,7 @@
 import json
 import sys
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from urllib2 import urlopen
 
 def game_data(game_date):
@@ -29,7 +29,10 @@ if __name__ == "__main__":
     game_date = None
     if len(sys.argv) > 1:
         date_str = sys.argv[1]
-        game_date = datetime.strptime(date_str, "%Y%m%d")
+        if date_str == "yesterday":
+            game_date = date.today() - timedelta(days=1)
+        else:
+            game_date = datetime.strptime(date_str, "%Y%m%d")
     if not game_date:
         game_date = date.today()
 
