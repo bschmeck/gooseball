@@ -17,8 +17,8 @@ class LeagueStats:
 
     def __str__(self):
         ret = []
-        for code in self.teams.keys():
-            ret.append(str(self.teams[code]))
+        for (code, team) in iter(sorted(self.teams.items())):
+            ret.append(str(team))
         return "\n".join(ret)
     
 class TeamStats:
