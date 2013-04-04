@@ -4,6 +4,17 @@ import sys
 from datetime import date, datetime, timedelta
 from urllib2 import urlopen
 
+class LeagueStats:
+    TEAM_CODES = {"ARI","ATL","BAL","BOS","CHC","CIN","CLE","COL","CWS","DET","HOU","KC","LAA","LAD","MIA","MIL","MIN","NYM","NYY","OAK","PHI","PIT","SD","SEA","SF","STL","TB","TEX","TOR","WSH"}
+    
+    def __init__(self):
+        self.teams = {}
+        for code in self.TEAM_CODES:
+            self.teams[code] = TeamStats(code)
+        
+    def add_stats(self, stats):
+        self.teams[stats.team].add(stats)
+        
 class TeamStats:
     def __init__(self, team):
         self.team = team
@@ -14,6 +25,12 @@ class TeamStats:
 
     def final(self):
         return self.win + self.loss > 0
+
+    def add(self, stats):
+        self.hits += stats.hits
+        self.hr += stats.hr
+        self.win += stats.win
+        self.loss += stats.loss
     
     def __str__(self):
         if self.final():
