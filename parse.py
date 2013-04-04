@@ -64,14 +64,16 @@ def game_data(game_date):
 def game_stats(data):
     home = TeamStats(data["home_name_abbrev"].upper())
     away = TeamStats(data["away_name_abbrev"].upper())
-    
+
     if data["ind"] == 'F':
-        home.win = int(data["home_win"])
-        home.loss = int(data["home_loss"])
+        home_score = int(data["home_team_runs"])
+        away_score = int(data["away_team_runs"])
+        home.win = 1 if home_score > away_score else 0
+        home.loss = abs(1 - home.win)
         home.hits = int(data["home_team_hits"])
         home.hr = int(data["home_team_hr"])
-        away.win = int(data["away_win"])
-        away.loss = int(data["away_loss"])
+        away.win = home.loss
+        away.loss = home.win
         away.hits = int(data["away_team_hits"])
         away.hr = int(data["away_team_hr"])
     yield home
