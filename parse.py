@@ -14,7 +14,13 @@ class LeagueStats:
         
     def add_stats(self, stats):
         self.teams[stats.team].add(stats)
-        
+
+    def __str__(self):
+        ret = []
+        for code in self.teams.keys():
+            ret.append(str(self.teams[code]))
+        return "\n".join(ret)
+    
 class TeamStats:
     def __init__(self, team):
         self.team = team
@@ -72,18 +78,29 @@ def game_stats(data):
     yield away
 
 if __name__ == "__main__":
-    game_date = None
+    game_dates = []
     if len(sys.argv) > 1:
         date_str = sys.argv[1]
         if date_str == "yesterday":
-            game_date = date.today() - timedelta(days=1)
+            game_dates.append(date.today() - timedelta(days=1))
+        elif date_str == "week":
+            dte = date.today()
+            cur_day = dte.weekday()
+            while cur_day >= 0:
+                game_dates.append(dte)
+                dte -= timedelta(days=1)
+                cur_day -= 1
         else:
-            game_date = datetime.strptime(date_str, "%Y%m%d")
-    if not game_date:
-        game_date = date.today()
+            game_dates.append(datetime.strptime(date_str, "%Y%m%d"))
 
-    for game in game_data(game_date):
-        for team in game_stats(game):
-            print team
+    if len(game_dates) == 0:
+        game_dates.append(date.today())
+
+    league = LeagueStats()
+    for game_date in game_dates:
+        for game in game_data(game_date):
+            for team in game_stats(game):
+                league.add_stats(team)
+    print league
     
     
