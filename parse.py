@@ -88,6 +88,10 @@ if __name__ == "__main__":
         elif date_str == "week":
             dte = date.today()
             cur_day = dte.weekday()
+            if cur_day == 0:
+                # If today is Monday, assume we want last week's stats
+                dte -= timedelta(days=1)
+                cur_day = dte.weekday()
             while cur_day >= 0:
                 game_dates.append(dte)
                 dte -= timedelta(days=1)
