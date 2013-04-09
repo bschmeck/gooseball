@@ -43,7 +43,7 @@ class TeamStats:
             fmt_string = "%(team)s,%(win)d,%(loss)d,%(hits)d,%(hr)d"
             return fmt_string % self.__dict__
         else:
-            return "%(team)s,In Progress" % self.__dict__
+            return "%(team)s,0,0,0,0" % self.__dict__
         
 def game_data(game_date):
     year = game_date.strftime('%Y')
