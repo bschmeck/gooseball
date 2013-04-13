@@ -1,0 +1,7 @@
+<html>
+  <body>
+	{% for (code, team) in league_stats.teams_iter() %}
+	  {{ team }}<br>
+    {% endfor %}
+</body>
+</html>

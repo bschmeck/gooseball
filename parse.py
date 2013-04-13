@@ -17,9 +17,12 @@ class LeagueStats:
 
     def __str__(self):
         ret = []
-        for (code, team) in iter(sorted(self.teams.items())):
+        for (code, team) in self.teams_iter():
             ret.append(str(team))
         return "\n".join(ret)
+
+    def teams_iter(self):
+        return iter(sorted(self.teams.items()))
     
 class TeamStats:
     def __init__(self, team):
