@@ -2,23 +2,11 @@ import webapp2
 import jinja2
 import os
 
-from google.appengine.ext import db
-from parse import LeagueStats, TeamStats
+from db_models import Game
+from models import LeagueStats, TeamStats
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
-
-class Game(db.Model):
-    """Models an individual game"""
-    home_team = db.StringProperty()
-    away_team = db.StringProperty()
-    home_runs = db.IntegerProperty()
-    away_runs = db.IntegerProperty()
-    home_hits = db.IntegerProperty()
-    away_hits = db.IntegerProperty()
-    home_hrs = db.IntegerProperty()
-    away_hrs = db.IntegerProperty()
-    date = db.DateTimeProperty()
 
 class MainPage(webapp2.RequestHandler):
   def get(self):
