@@ -2,8 +2,8 @@ import webapp2
 import jinja2
 import os
 
-from db_models import Game
-from models import LeagueStats, TeamStats
+from models.db_models import Game
+from models.models import LeagueStats, TeamStats
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))

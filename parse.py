@@ -4,7 +4,7 @@ import sys
 from datetime import date, datetime, timedelta
 from urllib2 import urlopen
 
-from models import LeagueStats, TeamStats
+from models.models import LeagueStats, TeamStats
 
 def game_data(game_date):
     year = game_date.strftime('%Y')
