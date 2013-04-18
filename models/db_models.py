@@ -2,13 +2,12 @@ from google.appengine.ext import db
 
 class Game(db.Model):
     """Models an individual game"""
-    home_team = db.StringProperty()
-    away_team = db.StringProperty()
-    home_runs = db.IntegerProperty()
-    away_runs = db.IntegerProperty()
-    home_hits = db.IntegerProperty()
-    away_hits = db.IntegerProperty()
-    home_hrs = db.IntegerProperty()
-    away_hrs = db.IntegerProperty()
+    gid = db.StringProperty()
+    team = db.StringProperty()
+    runs = db.IntegerProperty()
+    runs_allowed = db.IntegerProperty()
+    hits = db.IntegerProperty()
+    hits_allowed = db.IntegerProperty()
+    hrs = db.IntegerProperty()
+    hrs_allowed = db.IntegerProperty()
     date = db.DateTimeProperty()
-
