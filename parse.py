@@ -65,7 +65,7 @@ def game_stats(data):
     home = TeamStats(data["home_name_abbrev"].upper())
     away = TeamStats(data["away_name_abbrev"].upper())
 
-    if data["ind"] == 'F':
+    if data["ind"] == 'F' or data["ind"] == 'FR':
         home_score = int(data["home_team_runs"])
         away_score = int(data["away_team_runs"])
         home.win = 1 if home_score > away_score else 0
