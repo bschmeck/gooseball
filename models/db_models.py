@@ -8,7 +8,7 @@ class Game(db.Model):
     gid = db.StringProperty()
     date = db.DateTimeProperty()
     home_team = db.StringProperty()
-    away_team = db.BooleanProperty()
+    away_team = db.StringProperty()
     home_runs = db.IntegerProperty()
     away_runs = db.IntegerProperty()
     home_hits = db.IntegerProperty()
@@ -30,15 +30,17 @@ class Game(db.Model):
             game = Game()        
             game.gid = gid
             
-        game.date = datetime.strptime("%Y/%m/%d", data["original_date"])
+        game.date = datetime.strptime(data["original_date"], "%Y/%m/%d")
 
         game.home_team = data["home_name_abbrev"].upper()
-        game.away_team = data["home_name_abbrev"].upper()
+        game.away_team = data["away_name_abbrev"].upper()
         game.home_runs = int(data["home_team_runs"])
         game.away_runs = int(data["away_team_runs"])
         game.home_hits = int(data["home_team_hits"])
         game.away_hits = int(data["away_team_hits"])
-        game.home_hrs = int(data["home_team_hrs"])
-        game.away_hrs = int(data["away_team_hrs"])
+        game.home_hrs = int(data["home_team_hr"])
+        game.away_hrs = int(data["away_team_hr"])
         game.home_win = 1 if game.home_runs > game.away_runs else 0
         game.away_win = abs(1 - game.home_win)
+
+        game.put()
