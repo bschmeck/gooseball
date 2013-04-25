@@ -5,7 +5,7 @@ from google.appengine.ext import db
 
 class Game(db.Model):
     """Models an individual game"""
-    date = db.DateTimeProperty()
+    date = db.DateProperty()
     home_team = db.StringProperty()
     away_team = db.StringProperty()
     home_runs = db.IntegerProperty()
@@ -29,7 +29,7 @@ class Game(db.Model):
         if not game:
             game = Game(key_name=gid)
             
-        game.date = datetime.strptime(data["original_date"], "%Y/%m/%d")
+        game.date = datetime.strptime(data["original_date"], "%Y/%m/%d").date()
 
         game.home_team = data["home_name_abbrev"].upper()
         game.away_team = data["away_name_abbrev"].upper()
