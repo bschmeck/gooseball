@@ -5,7 +5,6 @@ from google.appengine.ext import db
 
 class Game(db.Model):
     """Models an individual game"""
-    gid = db.StringProperty()
     date = db.DateTimeProperty()
     home_team = db.StringProperty()
     away_team = db.StringProperty()
@@ -25,10 +24,10 @@ class Game(db.Model):
         gid = re.sub("[/-]", "_", data["id"])
 
         # If we've already seen this game, we're updating, otherwise we need to create a new game
-        game = Game.all().filter("gid = ", gid).get()
+        game_key = db.Key.from_path("Game", gid)
+        game = db.get(game_key)
         if not game:
-            game = Game()        
-            game.gid = gid
+            game = Game(key_name=gid)
             
         game.date = datetime.strptime(data["original_date"], "%Y/%m/%d")
 
