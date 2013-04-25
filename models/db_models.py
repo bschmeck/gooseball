@@ -23,14 +23,9 @@ class Game(db.Model):
         # looks like 2013_04_16_nynmlb_colmlb_1, and we store the URL version of the gid
         gid = re.sub("[/-]", "_", data["id"])
 
-        # If we've already seen this game, we're updating, otherwise we need to create a new game
-        game_key = db.Key.from_path("Game", gid)
-        game = db.get(game_key)
-        if not game:
-            game = Game(key_name=gid)
-            
+        # If we've already seen this game, we'll just overwrite it
+        game = Game(key_name=gid)
         game.date = datetime.strptime(data["original_date"], "%Y/%m/%d").date()
-
         game.home_team = data["home_name_abbrev"].upper()
         game.away_team = data["away_name_abbrev"].upper()
         game.home_runs = int(data["home_team_runs"])
