@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     league = LeagueStats()
     for game_date in game_dates:
-        for game in Scraper.game_data(game_date):
+        for game in Scraper.game_data(*Scraper.date_parts(game_date)):
             for team in game_stats(game):
                 league.add_stats(team)
     print league
