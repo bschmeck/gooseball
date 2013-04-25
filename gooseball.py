@@ -21,8 +21,10 @@ class ScrapeDate(webapp2.RequestHandler):
         month = a[1]
         day = a[2]
 
+        games = []
         for game in Scraper.game_data(year, month, day):
-            print game
+            games.append(Game.from_scoreboard_data(game))
+        print len(games)
         
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/scrape/(\d{4})/(\d{2})/(\d{2})/?$', ScrapeDate)],
