@@ -5,22 +5,7 @@ from datetime import date, datetime, timedelta
 from urllib2 import urlopen
 
 from models.models import LeagueStats, TeamStats
-
-def game_data(game_date):
-    year = game_date.strftime('%Y')
-    month = game_date.strftime('%m')
-    day = game_date.strftime('%d')
-    url = 'http://gdx.mlb.com/components/game/mlb/year_%(year)s/month_%(month)s/day_%(day)s/miniscoreboard.json' % locals()
-
-    data = urlopen(url).read()
-    scoreboard = json.loads(data)
-    game_arr = scoreboard["data"]["games"]["game"]
-
-    # If there's only one game, it doesn't seem to be in an array.  Force it.
-    if type(game_arr) == dict:
-        game_arr = [game_arr]
-    for game in game_arr:
-        yield game
+from models.scraper import Scraper
 
 def game_stats(data):
     home = TeamStats(data["home_name_abbrev"].upper())
@@ -65,7 +50,7 @@ if __name__ == "__main__":
 
     league = LeagueStats()
     for game_date in game_dates:
-        for game in game_data(game_date):
+        for game in Scraper.game_data(game_date):
             for team in game_stats(game):
                 league.add_stats(team)
     print league
