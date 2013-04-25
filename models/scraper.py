@@ -3,15 +3,10 @@ import json
 from urllib2 import urlopen
 
 class Scraper:
-    @classmethod
-    def date_parts(cls, game_date):
-        return [game_date.strftime('%Y'),
-                game_date.strftime('%m'),
-                game_date.strftime('%d')]
         
     @classmethod
-    def game_data(cls, year, month, day):
-        url = 'http://gdx.mlb.com/components/game/mlb/year_%(year)s/month_%(month)s/day_%(day)s/miniscoreboard.json' % locals()
+    def game_data(cls, game_date):
+        url = game_date.strftime('http://gdx.mlb.com/components/game/mlb/year_%Y/month_%m/day_%d/miniscoreboard.json')
 
         data = urlopen(url).read()
         scoreboard = json.loads(data)
