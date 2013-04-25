@@ -3,6 +3,8 @@ import re
 
 from google.appengine.ext import db
 
+from models import TeamStats
+
 class Game(db.Model):
     """Models an individual game"""
     date = db.DateProperty()
@@ -38,3 +40,19 @@ class Game(db.Model):
         game.away_win = abs(1 - game.home_win)
 
         game.put()
+
+    def home_stats(self):
+        stats = TeamStats(self.home_team)
+        stats.hits = self.home_hits
+        stats.hr = self.home_hrs
+        stats.win = self.home_win
+        stats.loss = self.away_win
+        return stats
+    
+    def away_stats(self):
+        stats = TeamStats(self.away_team)
+        stats.hits = self.away_hits
+        stats.hr = self.away_hrs
+        stats.win = self.away_win
+        stats.loss = self.home_win
+        return stats
