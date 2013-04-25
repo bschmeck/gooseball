@@ -31,7 +31,7 @@ class Game(db.Model):
         game.home_team = data["home_name_abbrev"].upper()
         game.away_team = data["away_name_abbrev"].upper()
         
-        if data["status"] != "Postponed":
+        if data["status"] not in ["Preview", "Postponed"]:
             game.home_runs = int(data["home_team_runs"])
             game.away_runs = int(data["away_team_runs"])
             game.home_hits = int(data["home_team_hits"])
