@@ -40,8 +40,7 @@ class Game(db.Model):
             game.away_hrs = int(data["away_team_hr"])
             game.home_win = 1 if game.home_runs > game.away_runs else 0
             game.away_win = abs(1 - game.home_win)
-
-        game.put()
+            game.put()
 
     def home_stats(self):
         stats = TeamStats(self.home_team)
