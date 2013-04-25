@@ -4,62 +4,8 @@ import sys
 from datetime import date, datetime, timedelta
 from urllib2 import urlopen
 
-class LeagueStats:
-    TEAM_CODES = {"ARI","ATL","BAL","BOS","CHC","CIN","CLE","COL","CWS","DET","HOU","KC","LAA","LAD","MIA","MIL","MIN","NYM","NYY","OAK","PHI","PIT","SD","SEA","SF","STL","TB","TEX","TOR","WSH"}
-    
-    def __init__(self):
-        self.teams = {}
-        for code in self.TEAM_CODES:
-            self.teams[code] = TeamStats(code)
-        
-    def add_stats(self, stats):
-        self.teams[stats.team].add(stats)
-
-    def __str__(self):
-        ret = []
-        for (code, team) in iter(sorted(self.teams.items())):
-            ret.append(str(team))
-        return "\n".join(ret)
-    
-class TeamStats:
-    def __init__(self, team):
-        self.team = team
-        self.hits = 0
-        self.hr = 0
-        self.win = 0
-        self.loss = 0
-
-    def final(self):
-        return self.win + self.loss > 0
-
-    def add(self, stats):
-        self.hits += stats.hits
-        self.hr += stats.hr
-        self.win += stats.win
-        self.loss += stats.loss
-    
-    def __str__(self):
-        if self.final():
-            fmt_string = "%(team)s,%(win)d,%(loss)d,%(hits)d,%(hr)d"
-            return fmt_string % self.__dict__
-        else:
-            return "%(team)s,0,0,0,0" % self.__dict__
-        
-def game_data(game_date):
-    year = game_date.strftime('%Y')
-    month = game_date.strftime('%m')
-    day = game_date.strftime('%d')
-    url = 'http://gdx.mlb.com/components/game/mlb/year_%(year)s/month_%(month)s/day_%(day)s/miniscoreboard.json' % locals()
-
-    data = urlopen(url).read()
-    scoreboard = json.loads(data)
-    game_arr = scoreboard["data"]["games"]["game"]
-
-    # If there's only one game, it doesn't seem to be in an array.  Force it.
-    if type(game_arr) == dict:
-        game_arr = [game_arr]
-    for game in game_arr:
-        yield game
+from models.models import LeagueStats, TeamStats
+from models.scraper import Scraper
 
 def game_stats(data):
     home = TeamStats(data["home_name_abbrev"].upper())
@@ -104,7 +50,7 @@ if __name__ == "__main__":
 
     league = LeagueStats()
     for game_date in game_dates:
-        for game in game_data(game_date):
+        for game in Scraper.game_data(*Scraper.date_parts(game_date)):
             for team in game_stats(game):
                 league.add_stats(team)
     print league
