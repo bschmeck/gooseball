@@ -38,8 +38,12 @@ class Game(db.Model):
             game.away_hits = int(data["away_team_hits"])
             game.home_hrs = int(data["home_team_hr"])
             game.away_hrs = int(data["away_team_hr"])
-            game.home_win = 1 if game.home_runs > game.away_runs else 0
-            game.away_win = abs(1 - game.home_win)
+            if data["status"] in ["Final", "Completed Early"]:
+                game.home_win = 1 if game.home_runs > game.away_runs else 0
+                game.away_win = abs(1 - game.home_win)
+            else:
+                game.home_win = 0
+                game.away_win = 0
             game.put()
 
     def home_stats(self):
