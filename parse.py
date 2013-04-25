@@ -29,9 +29,6 @@ class TeamStats:
         self.win = 0
         self.loss = 0
 
-    def final(self):
-        return self.win + self.loss > 0
-
     def add(self, stats):
         self.hits += stats.hits
         self.hr += stats.hr
@@ -39,11 +36,7 @@ class TeamStats:
         self.loss += stats.loss
     
     def __str__(self):
-        if self.final():
-            fmt_string = "%(team)s,%(win)d,%(loss)d,%(hits)d,%(hr)d"
-            return fmt_string % self.__dict__
-        else:
-            return "%(team)s,0,0,0,0" % self.__dict__
+        return "%(team)s,%(win)d,%(loss)d,%(hits)d,%(hr)d" % self.__dict__
         
 def game_data(game_date):
     year = game_date.strftime('%Y')
