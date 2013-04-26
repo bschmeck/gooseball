@@ -38,12 +38,14 @@ class Cron(webapp2.RequestHandler):
             
     def scrape(self):
         scrape_date = datetime.now()
+        print scrape_date
         # I *think* the appengine server will give us Pacific time.
         # So this is 10am Central.
         if scrape_date.hour < 8:
             scrape_date -= timedelta(days=1)
-            for game in Scraper.game_data(start):
-                Game.from_scoreboard_data(game)
+
+        for game in Scraper.game_data(scrape_date):
+            Game.from_scoreboard_data(game)
 
                       
 class ScrapeDate(webapp2.RequestHandler):
