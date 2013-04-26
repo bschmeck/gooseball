@@ -1,0 +1,4 @@
+cron:
+- description: automated scraper
+  url: /cron/scrape
+  schedule: every 15 minutes

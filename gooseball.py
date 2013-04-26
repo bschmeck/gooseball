@@ -29,6 +29,21 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 
+class Cron(webapp2.RequestHandler):
+    def get(self, job):
+        if job == "scrape":
+            self.scrape()
+        else:
+            self.error(400)
+            
+    def scrape(self):
+        scrape_date = datetime.now()
+        # I *think* the appengine server will give us Pacific time.
+        # So this is 10am Central.
+        if scrape_date.hour < 8:
+            scrape_date -= timedelta(days=1)
+        self.redirect(scrape_date.strftime('/scrape/%Y%m%d'))
+                      
 class ScrapeDate(webapp2.RequestHandler):
     def get(self, *a):
         start, end = daterange(a)
@@ -57,5 +72,6 @@ class Stats(webapp2.RequestHandler):
         
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/scrape/(\d{8})(\.\.\.\d{8})?/?$', ScrapeDate),
+                               ('/cron/(.*)/?$', Cron),
                                ('/stats/(\d{8})(\.\.\.\d{8})?/?$', Stats)],
                               debug=True)
