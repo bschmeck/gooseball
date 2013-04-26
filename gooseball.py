@@ -42,7 +42,9 @@ class Cron(webapp2.RequestHandler):
         # So this is 10am Central.
         if scrape_date.hour < 8:
             scrape_date -= timedelta(days=1)
-        self.redirect(scrape_date.strftime('/scrape/%Y%m%d'))
+            for game in Scraper.game_data(start):
+                Game.from_scoreboard_data(game)
+
                       
 class ScrapeDate(webapp2.RequestHandler):
     def get(self, *a):
