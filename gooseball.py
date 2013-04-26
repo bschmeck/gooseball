@@ -65,9 +65,13 @@ class Stats(webapp2.RequestHandler):
         for game in query.run():
             league.add_stats(game.home_stats())
             league.add_stats(game.away_stats())
-        template_values = {'league_stats': league}
-        template = JINJA_ENVIRONMENT.get_template('index.html')
-        self.response.write(template.render(template_values))
+        if self.request.get("as").lower() == "json":
+            self.response.headers["Content-Type"] = "application/json"
+            self.response.out.write(league.to_json())
+        else:
+            template_values = {'league_stats': league}
+            template = JINJA_ENVIRONMENT.get_template('index.html')
+            self.response.write(template.render(template_values))
         
         
 app = webapp2.WSGIApplication([('/', MainPage),

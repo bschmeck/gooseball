@@ -1,3 +1,5 @@
+import json
+
 class LeagueStats:
     TEAM_CODES = {"ARI","ATL","BAL","BOS","CHC","CIN","CLE","COL","CWS","DET","HOU","KC","LAA","LAD","MIA","MIL","MIN","NYM","NYY","OAK","PHI","PIT","SD","SEA","SF","STL","TB","TEX","TOR","WSH"}
     
@@ -17,7 +19,13 @@ class LeagueStats:
 
     def teams_iter(self):
         return iter(sorted(self.teams.items()))
-    
+
+    def to_json(self):
+        ret = {}
+        for (code, team) in self.teams_iter():
+            ret[code] = team.__dict__
+        return json.dumps(ret)
+        
 class TeamStats:
     def __init__(self, team):
         self.team = team
