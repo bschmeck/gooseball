@@ -48,7 +48,7 @@ class Game(db.Model):
             game.away_hits = int(data["away_team_hits"])
             game.home_hrs = int(data["home_team_hr"])
             game.away_hrs = int(data["away_team_hr"])
-            if data["status"] in ["Final", "Completed Early"]:
+            if data["status"] in ["Final", "Completed Early", "Game Over"]:
                 game.home_win = 1 if game.home_runs > game.away_runs else 0
                 game.away_win = abs(1 - game.home_win)
             else:
