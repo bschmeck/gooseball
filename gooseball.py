@@ -56,8 +56,9 @@ class ScrapeDate(webapp2.RequestHandler):
                 games.append(Game.from_scoreboard_data(game))
             start += timedelta(days=1)
             
-        print len(games)
-
+        for stat in CachedStats.all():
+            stat.delete()
+        
 class Stats(webapp2.RequestHandler):
     def get(self, *a):
         return_type = self.request.get("as").lower() or "text"
