@@ -10,7 +10,7 @@ class CachedStats(db.Model):
     response = db.TextProperty()
 
     @classmethod
-    def key(cls, argstr, return_type):
+    def generate_key(cls, argstr, return_type):
         if return_type != "json":
             return_type = ""
         return argstr + return_type

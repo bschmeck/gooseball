@@ -61,7 +61,7 @@ class ScrapeDate(webapp2.RequestHandler):
 class Stats(webapp2.RequestHandler):
     def get(self, *a):
         return_type = self.request.get("as").lower() or "text"
-        key_name = CachedStats.key("".join(filter(None, a)), return_type)
+        key_name = CachedStats.generate_key("".join(filter(None, a)), return_type)
         cached = CachedStats.get_by_key_name(key_name)
 
         if not cached:
