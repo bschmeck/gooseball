@@ -46,6 +46,8 @@ class Cron(webapp2.RequestHandler):
         for game in Scraper.game_data(scrape_date):
             Game.from_scoreboard_data(game)
 
+        for stat in CachedStats.all():
+            stat.delete()
                       
 class ScrapeDate(webapp2.RequestHandler):
     def get(self, *a):
