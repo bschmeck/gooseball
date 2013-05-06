@@ -5,6 +5,16 @@ from google.appengine.ext import db
 
 from models import TeamStats
 
+class CachedStats(db.Model):
+    """Caches stats for a given time range."""
+    response = db.TextProperty()
+
+    @classmethod
+    def key(cls, argstr, return_type):
+        if return_type != "json":
+            return_type = ""
+        return argstr + return_type
+    
 class Game(db.Model):
     """Models an individual game"""
     date = db.DateProperty()

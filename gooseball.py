@@ -3,7 +3,7 @@ import jinja2
 import os
 import webapp2
 
-from models.db_models import Game
+from models.db_models import CachedStats, Game
 from models.models import LeagueStats, TeamStats
 from models.scraper import Scraper
 
@@ -60,20 +60,32 @@ class ScrapeDate(webapp2.RequestHandler):
 
 class Stats(webapp2.RequestHandler):
     def get(self, *a):
-        (start, end) = daterange(a)
-        league = LeagueStats()
-        query = Game.all().filter("date >= ", start).filter("date <= ", end)
+        return_type = self.request.get("as").lower() or "text"
+        key_name = CachedStats.key("".join(filter(None, a)), return_type)
+        cached = CachedStats.get_by_key_name(key_name)
 
-        for game in query.run():
-            league.add_stats(game.home_stats())
-            league.add_stats(game.away_stats())
-        if self.request.get("as").lower() == "json":
+        if not cached:
+            cached = CachedStats(key_name = key_name)
+            (start, end) = daterange(a)
+            league = LeagueStats()
+            query = Game.all().filter("date >= ", start).filter("date <= ", end)
+
+            for game in query.run():
+                league.add_stats(game.home_stats())
+                league.add_stats(game.away_stats())
+            if return_type == "json":
+                cached.response = league.to_json()
+            else:
+                template_values = {'league_stats': league}
+                template = JINJA_ENVIRONMENT.get_template('index.html')
+                cached.response = template.render(template_values)
+            cached.put()
+            
+        if return_type == "json":
             self.response.headers["Content-Type"] = "application/json"
-            self.response.out.write(league.to_json())
+            self.response.write(cached.response)
         else:
-            template_values = {'league_stats': league}
-            template = JINJA_ENVIRONMENT.get_template('index.html')
-            self.response.write(template.render(template_values))
+            self.response.write(cached.response)
         
         
 app = webapp2.WSGIApplication([('/', MainPage),
