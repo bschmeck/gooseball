@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import jinja2
 import os
+import urllib2
 import webapp2
 
 from models.db_models import CachedStats, Game
@@ -33,9 +34,14 @@ class Cron(webapp2.RequestHandler):
     def get(self, job):
         if job == "scrape":
             self.scrape()
+        elif job == "ping_speedball":
+            self.ping_speedball()
         else:
             self.error(400)
-            
+
+    def ping_speedball(self):
+        urllib2.urlopen("http://speedleague.herokuapp.com/")
+        
     def scrape(self):
         scrape_date = datetime.now()
         # Scrape yesterday's games up until 10am Central

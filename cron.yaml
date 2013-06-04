@@ -2,3 +2,6 @@ cron:
 - description: automated scraper
   url: /cron/scrape
   schedule: every 15 minutes
+- description: speeball pinger
+  url: /cron/ping_speedball
+  schedule: every 15 minutes
