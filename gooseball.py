@@ -35,12 +35,19 @@ class Cron(webapp2.RequestHandler):
         if job == "scrape":
             self.scrape()
         elif job == "ping_speedball":
-            self.ping_speedball()
+            self.ping("speedball")
+        elif job == "ping_lifterapp":
+            self.ping("lifterapp")
         else:
             self.error(400)
 
-    def ping_speedball(self):
-        urllib2.urlopen("http://speedleague.herokuapp.com/")
+    def ping(self, id):
+        try:
+            url = {'speedball': "http://speedleague.herokuapp.com/",
+                   'lifterapp': "http://lifterapp.herokuapp.com/"}[id]
+            urllib2.urlopen(url)
+        except KeyError:
+            pass
         
     def scrape(self):
         scrape_date = datetime.now()
