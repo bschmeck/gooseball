@@ -9,7 +9,8 @@ class LeagueStats:
             self.teams[code] = TeamStats(code)
         
     def add_stats(self, stats):
-        self.teams[stats.team].add(stats)
+        if stats.team in self.TEAM_CODES:
+            self.teams[stats.team].add(stats)
 
     def __str__(self):
         ret = []
