@@ -8,3 +8,6 @@ cron:
 - description: lifterapp pinger
   url: /cron/ping_lifterapp
   schedule: every 15 minutes
+- description: zrankings pinger
+  url: /cron/ping_zrankings
+  schedule: every 15 minutes
