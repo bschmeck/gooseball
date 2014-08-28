@@ -11,3 +11,6 @@ cron:
 - description: zrankings pinger
   url: /cron/ping_zrankings
   schedule: every 15 minutes
+- description: maple-planner pinger
+  url: /cron/ping_maple_planner
+  schedule: every 15 minutes

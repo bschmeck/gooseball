@@ -40,6 +40,8 @@ class Cron(webapp2.RequestHandler):
             self.ping("lifterapp")
         elif job == "ping_zrankings":
             self.ping("zrankings")
+        elif job == "ping_maple_planner":
+            self.ping("maple-planner")
         else:
             self.error(400)
 
@@ -47,7 +49,8 @@ class Cron(webapp2.RequestHandler):
         try:
             url = {'speedball': "http://speedleague.herokuapp.com/",
                    'lifterapp': "http://lifterapp.herokuapp.com/",
-                   'zrankings': "http://zrankings.com"}[id]
+                   'zrankings': "http://zrankings.com",
+                   'maple-planner': "http://maple-planner.herokuapp.com/"}[id]
             urllib2.urlopen(url)
         except KeyError:
             pass
