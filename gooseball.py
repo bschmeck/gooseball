@@ -47,13 +47,22 @@ class Cron(webapp2.RequestHandler):
 
     def ping(self, id):
         try:
-            url = {'speedball': "http://speedleague.herokuapp.com/",
+            if should_ping(id):
+                url = {'speedball': "http://speedleague.herokuapp.com/",
                    'lifterapp': "http://lifterapp.herokuapp.com/",
                    'zrankings': "http://zrankings.com",
                    'maple-planner': "http://maple-planner.herokuapp.com/"}[id]
-            urllib2.urlopen(url)
+                urllib2.urlopen(url)
         except KeyError:
             pass
+
+    def should_ping(self, id):
+        # Don't ping between midnight and 6am Central (5am and 11am UTC.)
+        blackout_start = 5
+        blackout_end = 11
+        hour = datetime.utcnow().hour
+
+        hour < blackout_start or hour >= blackout_end
         
     def scrape(self):
         scrape_date = datetime.now()
