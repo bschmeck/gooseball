@@ -47,7 +47,7 @@ class Cron(webapp2.RequestHandler):
 
     def ping(self, id):
         try:
-            if should_ping(id):
+            if self.should_ping(id):
                 url = {'speedball': "http://speedleague.herokuapp.com/",
                    'lifterapp': "http://lifterapp.herokuapp.com/",
                    'zrankings': "http://zrankings.com",
